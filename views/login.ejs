@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login - Ambient Haven</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #2e2e2e, #1c1c1c);
+      color: #ddd;
+    }
+    .login-container {
+      width: 300px;
+      margin: 80px auto;
+      background-color: #2a2a2a;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      margin-top: 0;
+      color: #eee;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+    label {
+      margin: 10px 0 5px;
+      font-weight: bold;
+      color: #ccc;
+    }
+    input[type="text"],
+    input[type="password"] {
+      padding: 8px;
+      border: none;
+      border-radius: 4px;
+      margin-bottom: 10px;
+      background-color: #444;
+      color: #eee;
+    }
+    .error {
+      color: #ff6666;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    button {
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      background-color: #59b390; /* a calm greenish color */
+      color: #fff;
+      font-size: 1em;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    button:hover {
+      background-color: #48a182;
+    }
+    .register-link {
+      margin-top: 15px;
+      text-align: center;
+    }
+    .register-link a {
+      color: #66aaff;
+      text-decoration: none;
+    }
+    .register-link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h1>Login</h1>
+    <% if (error) { %>
+      <div class="error"><%= error %></div>
+    <% } %>
+    <form action="/login" method="POST">
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" required>
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required>
+
+      <button type="submit">Login</button>
+    </form>
+    <div class="register-link">
+      <p>Don't have an account? <a href="/register">Register here</a></p>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Register - Ambient Haven</title>
+  <style>
+    /* Global styles */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #2e2e2e, #1c1c1c);
+      color: #ddd;
+    }
+    .register-container {
+      width: 350px;
+      margin: 80px auto;
+      background-color: #2a2a2a;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.7);
+      padding: 30px 20px;
+      text-align: center;
+    }
+    .register-container h1 {
+      margin: 0;
+      margin-bottom: 20px;
+      font-size: 2em;
+      color: #fff;
+      text-shadow: 0 2px 3px rgba(0,0,0,0.5);
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+    }
+    label {
+      margin: 10px 0 5px;
+      font-weight: bold;
+      color: #ccc;
+    }
+    input[type="text"],
+    input[type="password"] {
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      margin-bottom: 15px;
+      background-color: #444;
+      color: #eee;
+      font-size: 1em;
+    }
+    button {
+      padding: 12px;
+      border: none;
+      border-radius: 4px;
+      background-color: #5d5df0;
+      color: #fff;
+      font-size: 1.1em;
+      cursor: pointer;
+      transition: background 0.3s;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    }
+    button:hover {
+      background-color: #4a4ac7;
+    }
+    .login-link {
+      margin-top: 15px;
+      font-size: 0.9em;
+      text-align: center;
+    }
+    .login-link a {
+      color: #66aaff;
+      text-decoration: none;
+    }
+    .login-link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="register-container">
+    <h1>Register</h1>
+    <form action="/register" method="POST">
+      <label for="username">Username</label>
+      <input type="text" name="username" id="username" required>
+
+      <label for="password">Password</label>
+      <input type="password" name="password" id="password" required>
+
+      <!-- Optionally, you can add a confirm password field here -->
+
+      <button type="submit">Register</button>
+    </form>
+    <div class="login-link">
+      <p>Already have an account? <a href="/login">Login here</a></p>
+    </div>
+  </div>
+</body>
+</html>

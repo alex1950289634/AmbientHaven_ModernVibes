@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Song History - Modern Vibes</title>
+  <!-- Use the same CSS as modernDashboard for consistent styling -->
+  <link rel="stylesheet" href="/styles/modernDashboard.css">
+  <style>
+    /* Additional History page styling (optional) */
+    #historyContainer {
+      margin-top: 80px;
+      padding: 20px;
+    }
+    /* Position and style for the "Empty All History" button */
+    #emptyHistoryBtn {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      padding: 10px 20px;
+      background: #f44336; /* red color */
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.6);
+    }
+    #emptyHistoryBtn:hover {
+      background: #d32f2f;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Song History</h1>
+  </div>
+
+  <!-- The "Empty All History" button in the top-left corner -->
+  <button id="emptyHistoryBtn" onclick="emptyHistory()">Empty All History</button>
+
+  <!-- Container where history song cards will be loaded -->
+  <div id="historyContainer"></div>
+
+  <!-- A “Back” button to return to Modern Dashboard -->
+  <button onclick="window.location.href='/modern'"
+    style="
+      position: absolute;
+      top: 10px; 
+      right: 10px; 
+      padding: 10px 20px; 
+      background: #5d5df0; 
+      color: white; 
+      border: none; 
+      border-radius: 5px; 
+      cursor: pointer;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.6);
+    ">
+    Back
+  </button>
+
+  <!-- Include modernDashboard.js so we can use loadHistory() and createSongCard() -->
+  <script src="/scripts/modernDashboard.js"></script>
+
+  <script>
+    // Load the history when the page is first opened
+    window.onload = loadHistory;
+
+    // Clears all songs from localStorage's "songHistory" and refreshes the display
+    function emptyHistory() {
+      localStorage.removeItem('songHistory');   // or localStorage.setItem('songHistory', '[]');
+      loadHistory();                            // Re-run loadHistory() to update the page
+    }
+  </script>
+</body>
+</html>

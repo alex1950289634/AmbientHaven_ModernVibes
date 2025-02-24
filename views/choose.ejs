@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Choose Your Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #1c1c1c;
+      font-family: Arial, sans-serif;
+      color: #ddd;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .choose-container {
+      text-align: center;
+    }
+    h1 {
+      color: #fff;
+      margin-bottom: 30px;
+      font-size: 2em;
+    }
+    .options {
+      display: flex;
+      gap: 50px;
+      justify-content: center;
+      align-items: center;
+    }
+    /* Circle styling */
+    .circle-option {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background-color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.1em;
+      font-weight: bold;
+      transition: background 0.3s, transform 0.3s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.7);
+    }
+    .circle-option:hover {
+      background-color: #5d5df0;
+      transform: scale(1.1);
+    }
+  </style>
+</head>
+<body>
+  <div class="choose-container">
+    <h1>Welcome! Choose Your Dashboard</h1>
+    <div class="options">
+      <!-- Circle for Ambient Haven -->
+      <a href="/dashboard" class="circle-option">
+        Ambient Haven
+      </a>
+      <!-- Circle for Modern Vides -->
+      <a href="/modern" class="circle-option">
+        Modern Vibes
+      </a>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard</title>
+  <style>
+    /* Basic reset and styling */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #1c1c1c; 
+      color: #ddd; 
+      overflow-x: hidden;
+    }
+
+    /* TOPBAR with Hamburger Menu & Branding */
+    .topbar {
+      display: flex;
+      align-items: center;
+      background-color: #333;
+      padding: 10px 20px;
+      position: relative;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    }
+    .menu-icon {
+      width: 30px;
+      height: auto;
+      cursor: pointer;
+      margin-right: 15px;
+    }
+    .logo-title {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo-title img.logo {
+      width: 50px; 
+      height: auto;
+      box-shadow: 0 0 5px rgba(0,0,0,0.6);
+      border-radius: 50%;
+    }
+    .logo-title h1 {
+      font-size: 1.8em;
+      margin: 0;
+      color: #fff;
+    }
+
+    /* DROPDOWN MENU */
+    .dropdown-menu {
+      display: none; 
+      position: absolute;
+      top: 60px;  
+      left: 10px; 
+      background-color: #333;
+      padding: 10px;
+      z-index: 10;
+      border-radius: 8px;
+    }
+    .dropdown-menu a {
+      display: block;
+      text-decoration: none;
+      color: #fff;
+      background: linear-gradient(45deg, #ff416c, #ff4b2b);
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 5px;
+      text-align: center;
+      font-weight: bold;
+      transition: background 0.3s, transform 0.3s;
+    }
+    .dropdown-menu a:hover {
+      background: linear-gradient(45deg, #ff4b2b, #ff416c);
+      transform: scale(1.05);
+    }
+
+    /* HEADER (Title & Subheading) */
+    .header {
+      text-align: center;
+      padding: 30px 20px;
+    }
+    .header h1 {
+      font-size: 2em;
+      margin: 0;
+      color: #fff;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    }
+    .subheading {
+      font-size: 1.2em;
+      margin: 10px 0;
+    }
+    /* Big recommendation button */
+    .big-recommend-button {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 15px 25px;
+      font-size: 1.1em;
+      color: #fff;
+      background: #5d5df0;
+      border-radius: 5px;
+      text-decoration: none;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.6);
+      transition: background 0.3s;
+    }
+    .big-recommend-button:hover {
+      background: #4a4ac7;
+    }
+
+    /* MAIN CONTENT WRAPPER */
+    .content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .intro-text {
+      text-align: center;
+      margin-bottom: 40px;
+      line-height: 1.5em;
+    }
+    .intro-text p {
+      max-width: 700px;
+      margin: 0 auto;
+      margin-bottom: 10px;
+    }
+
+    /* CARDS LAYOUT */
+    .cards-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+    .card {
+      background-color: #2e2e2e;
+      border-radius: 5px;
+      padding: 20px;
+      flex: 1;
+      min-width: 250px;
+      position: relative;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.7);
+    }
+    .card h2 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      color: #fff;
+      text-shadow: 0 1px 1px rgba(0,0,0,0.4);
+    }
+    .card p {
+      margin-bottom: 15px;
+    }
+
+    /* Items: image + text side by side */
+    .item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+    .item img {
+      width: 80px; 
+      height: auto;
+      border-radius: 4px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+      margin-right: 10px;
+      flex-shrink: 0;
+    }
+    .item-content {
+      display: flex;
+      flex-direction: column;
+    }
+    .item-content strong {
+      margin-bottom: 5px;
+      color: #fff;
+    }
+    /* Link color for visible items => now replaced by clickable spans */
+    .sound-link {
+      color: #d8509f;
+      cursor: pointer;
+    }
+    .sound-link:hover {
+      text-decoration: underline;
+    }
+    .item-content p {
+      margin: 0 0 10px;
+    }
+
+    /* Hidden items (More) */
+    .hidden-items {
+      display: none; 
+      margin-top: 10px;
+    }
+    .hidden-items .extra-item {
+      display: inline-block;
+      background-color: #444;
+      padding: 5px 8px;
+      margin: 4px 4px 0 0;
+      border-radius: 3px;
+      cursor: pointer;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    }
+    .hidden-items .extra-item:hover {
+      text-decoration: underline;
+      background-color: #555;
+    }
+    .hidden-items .extra-item a {
+      color: #9090e9; 
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .hidden-items .extra-item a:hover {
+      text-decoration: underline;
+    }
+
+    /* “More”/“Less” link styling */
+    .toggle-link {
+      color: #66aaff;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .toggle-link:hover {
+      text-decoration: underline;
+    }
+
+    /* =======================
+       MODAL (POPUP) FOR MP3
+       ======================= */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.7);
+      display: none; /* hidden by default */
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+    .modal-content {
+      background: #2a2a2a;
+      padding: 30px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.8);
+      text-align: center;
+      position: relative;
+    }
+    .modal-content h2 {
+      margin-top: 0;
+      color: #fff;
+      font-size: 1.8em;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    }
+    .close-btn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1.5em;
+      cursor: pointer;
+    }
+    .close-btn:hover {
+      color: #ff4b2b;
+    }
+    .pause-btn {
+      background: linear-gradient(45deg, #ff416c, #ff4b2b);
+      border: none;
+      border-radius: 5px;
+      padding: 10px 20px;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+      margin: 10px 0;
+      transition: background 0.3s, transform 0.3s;
+    }
+    .pause-btn:hover {
+      background: linear-gradient(45deg, #ff4b2b, #ff416c);
+      transform: scale(1.05);
+    }
+    .volume-slider {
+      width: 80%;
+      margin: 15px auto;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <img src="/images/hamburgerMenu.png" alt="Menu" class="menu-icon" onclick="toggleMenu()">
+    <div class="logo-title">
+      <img src="/images/logo.jpg" alt="Ambient Haven Logo" class="logo">
+      <h1>Ambient Haven</h1>
+    </div>
+    <div class="dropdown-menu" id="dropdownMenu">
+      <a href="/modern">Switch to Modern Vibes</a>
+      <a href="/soundrecommend">Get sounds recommendation</a>
+      <a href="/logout">Logout</a>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>Ambient Haven<sup>®</sup></h1>
+    <div class="subheading">Soundscapes to Focus, Relax &amp; Sleep</div>
+    <a href="/soundrecommend" class="big-recommend-button">Get sounds recommendation</a>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="content">
+    <div class="intro-text">
+      <p>
+        Step into a world of immersive audio experiences designed to elevate focus, promote relaxation, 
+        and encourage restful sleep. Explore a diverse selection of noise machines, natural ambience, 
+        and soothing melodies—each crafted to help you get your ideal sound environment. Whether you're seeking 
+        tranquility, concentration, or peaceful slumber, our dynamic sound tools are here to guide you toward 
+        your perfect audios.
+      </p>
+    </div>
+
+    <!-- =============== -->
+    <!-- ROW 1 -->
+    <!-- =============== -->
+    <div class="cards-container">
+      <!-- Focus & Productivity -->
+      <div class="card" id="focusCard">
+        <h2>Focus &amp; Productivity</h2>
+        <p>Concentrate better with consistent auditory environments that minimize distractions...</p>
+
+        <!-- Visible items -->
+        <div class="item">
+          <img src="/images/irish-coast.jpg" alt="Irish Coast">
+          <div class="item-content">
+            <strong>
+              <span class="sound-link" onclick="openPlayer('Irish Coast')">Irish Coast</span>
+            </strong>
+            <p>A coastal soundscape of ocean waves, rain, wind—nature's finest elements.</p>
+          </div>
+        </div>
+
+        <div class="item">
+          <img src="/images/cafe-restaurant.jpg" alt="Cafe Restaurant">
+          <div class="item-content">
+            <strong>
+              <span class="sound-link" onclick="openPlayer('Cafe Restaurant')">Cafe Restaurant</span>
+            </strong>
+            <p>The ambient hum of a coffee shop fosters focus and idea development.</p>
+          </div>
+        </div>
+
+        <!-- Hidden items -->
+        <div class="hidden-items" id="focusHidden">
+          <span class="extra-item">
+            <span class="sound-link" onclick="openPlayer('White Noise & Co')">White Noise &amp; Co</span>
+          </span>
+          <span class="extra-item">
+            <span class="sound-link" onclick="openPlayer('Rain Noise')">Rain Noise</span>
+          </span>
+          <span class="extra-item">
+            <span class="sound-link" onclick="openPlayer('Pebble Beach')">Pebble Beach</span>
+          </span>
+          <span class="extra-item">
+            <span class="sound-link" onclick="openPlayer('The Falls')">The Falls</span>
+          </span>
+          <span class="extra-item">
+            <span class="sound-link" onclick="openPlayer('Spaceship')">Spaceship</span>
+          </span>
+          <span class="extra-item">
+            <span class="sound-link" onclick="openPlayer('Flying Fortress')">Flying Fortress</span>
+          </span>
+          <span class="extra-item">
+            <span class="sound-link" onclick="openPlayer('Take It Easy')">Take It Easy</span>
+          </span>
+          <span class="extra-item">
+            <span class="sound-link" onclick="openPlayer('Quantum Polarity')">Quantum Polarity</span>
+          </span>
+        </div>
+        <p>
+          <a class="toggle-link" href="javascript:void(0)"
+             onclick="toggleItems('focusHidden','focusToggleLink')"
+             id="focusToggleLink">More</a>
+        </p>
+      </div>
+
+      <!-- Meditation & Relaxation -->
+      <div class="card" id="meditationCard">
+        <h2>Meditation &amp; Relaxation</h2>
+        <p>Reach a deeper state of relaxation with atmospheres designed to block out distractions...</p>
+
+        <!-- Visible items -->
+        <div class="item">
+          <img src="/images/japanese-garden.jpg" alt="Japanese Garden">
+          <div class="item-content">
+            <strong>
+              <span class="sound-link" onclick="openPlayer('Japanese Garden')">Japanese Garden</span>
+            </strong>
+            <p>Embrace zen tranquility. Let the Shishi–Odoshi rhythm guide you to inner peace.</p>
+          </div>
+        </div>
+        <div class="item">
+          <img src="/images/singing-bowls.jpg" alt="Singing Bowls">
+          <div class="item-content">
+            <strong>
+              <span class="sound-link" onclick="openPlayer('Singing Bowls')">Singing Bowls</span>
+            </strong>
+            <p>The archetype of meditational sounds, renowned for their soothing vibrations.</p>
+          </div>
+        </div>
+
+        <!-- Hidden items -->
+        <div class="hidden-items" id="meditationHidden">
+          <span class="extra-item">
+            <span class="sound-link" onclick="openPlayer('Deep Chant')">Deep Chant</span>
+          </span>
+          <span class="extra-item">
+            <span class="sound-link" onclick="openPlayer('Sleeping Dragon')">Sleeping Dragon</span>
+          </span>
+          <span class="extra-item">
+            <span class="sound-link" onclick="openPlayer('Aeolian')">Aeolian</span>
+          </span>
+          <span class="extra-item">
+            <span class="sound-link" onclick="openPlayer('Temple Bells')">Temple Bells</span>
+          </span>
+          <span class="extra-item">
+            <span class="sound-link" onclick="openPlayer('Tuned Cave')">Tuned Cave</span>
+          </span>
+          <span class="extra-item">
+            <span class="sound-link" onclick="openPlayer('Japanese Oase')">Japanese Oase</span>
+          </span>
+        </div>
+        <p>
+          <a class="toggle-link" href="javascript:void(0)"
+             onclick="toggleItems('meditationHidden','meditationToggleLink')"
+             id="meditationToggleLink">More</a>
+        </p>
+      </div>
+
+      <!-- Sleep Aid -->
+      <div class="card" id="sleepAidCard">
+        <h2>Sleep Aid</h2>
+        <p>Fall asleep faster and stay asleep by masking disturbing sounds...</p>
+
+        <div class="item">
+          <img src="/images/waterfall.jpg" alt="Waterfall">
+          <div class="item-content">
+            <strong>
+              <span class="sound-link" onclick="openPlayer('Waterfall')">Waterfall</span>
+            </strong>
+            <p>The organic source of white noise, eliminating distractions for peaceful sleep.</p>
+          </div>
+        </div>
+        <div class="item">
+          <img src="/images/distant-thunder.jpg" alt="Distant Thunder">
+          <div class="item-content">
+            <strong>
+              <span class="sound-link" onclick="openPlayer('Distant Thunder')">Distant Thunder</span>
+            </strong>
+            <p>A gentle rain and far–off rumbles—an Ambient Haven fan–favorite lullaby!</p>
+          </div>
+        </div>
+
+        <div class="hidden-items" id="sleepAidHidden">
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Rain on a Tent')">Rain on a Tent</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Fireplace')">Fireplace</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Drifting Away')">Drifting Away</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Peninsula')">Peninsula</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Fan Noise')">Fan Noise</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Car Interior')">Car Interior</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Sleeping Dragon')">Sleeping Dragon</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Calm Lake')">Calm Lake</span></span>
+        </div>
+        <p>
+          <a class="toggle-link" href="javascript:void(0)"
+             onclick="toggleItems('sleepAidHidden','sleepAidToggleLink')"
+             id="sleepAidToggleLink">More</a>
+        </p>
+      </div>
+    </div>
+
+    <!-- =============== -->
+    <!-- ROW 2 -->
+    <!-- =============== -->
+    <div class="cards-container">
+      <!-- White Noise -->
+      <div class="card" id="whiteNoiseCard">
+        <h2>White Noise</h2>
+        <p>White noise is a unique background sound containing equal frequencies across...</p>
+
+        <div class="item">
+          <img src="/images/white-noise-co.jpg" alt="White Noise & Co">
+          <div class="item-content">
+            <strong>
+              <span class="sound-link" onclick="openPlayer('White Noise & Co')">White Noise &amp; Co</span>
+            </strong>
+            <p>Play noise in any spectral color: white, pink, brown, even gray.</p>
+          </div>
+        </div>
+        <div class="item">
+          <img src="/images/white-rain.jpg" alt="White Rain">
+          <div class="item-content">
+            <strong>
+              <span class="sound-link" onclick="openPlayer('White Rain')">White Rain</span>
+            </strong>
+            <p>The tone and comfort of a natural sound, with synthetic noise properties.</p>
+          </div>
+        </div>
+
+        <div class="hidden-items" id="whiteNoiseHidden">
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Waterfall Noise')">Waterfall Noise</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Unreal Wind')">Unreal Wind</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Unreal Ocean')">Unreal Ocean</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Fireplace')">Fireplace</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Aircraft Cabin')">Aircraft Cabin</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Traffic Noise')">Traffic Noise</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Data Center')">Data Center</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Fan Noise')">Fan Noise</span></span>
+        </div>
+        <p>
+          <a class="toggle-link" href="javascript:void(0)"
+             onclick="toggleItems('whiteNoiseHidden','whiteNoiseToggleLink')"
+             id="whiteNoiseToggleLink">More</a>
+        </p>
+      </div>
+
+      <!-- Tinnitus Relief -->
+      <div class="card" id="tinnitusCard">
+        <h2>Tinnitus Relief</h2>
+        <p>Alleviate tinnitus by masking the ringing or buzzing sounds in your ears...</p>
+
+        <div class="item">
+          <img src="/images/summer-night.jpg" alt="Summer Night">
+          <div class="item-content">
+            <strong>
+              <span class="sound-link" onclick="openPlayer('Summer Night')">Summer Night</span>
+            </strong>
+            <p>Swap synthetic noise for night–time critters' melodies—thank us later!</p>
+          </div>
+        </div>
+        <div class="item">
+          <img src="/images/neuromodulator.jpg" alt="Neuromodulator">
+          <div class="item-content">
+            <strong>
+              <span class="sound-link" onclick="openPlayer('Neuromodulator')">Neuromodulator</span>
+            </strong>
+            <p>Bizarre yet effective sound that works magic even after hitting pause.</p>
+          </div>
+        </div>
+
+        <div class="hidden-items" id="tinnitusHidden">
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('White Rain')">White Rain</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('White Bursts')">White Bursts</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Aural Scan')">Aural Scan</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Rice Fields')">Rice Fields</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Twilight')">Twilight</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Fairy Pond')">Fairy Pond</span></span>
+        </div>
+        <p>
+          <a class="toggle-link" href="javascript:void(0)"
+             onclick="toggleItems('tinnitusHidden','tinnitusToggleLink')"
+             id="tinnitusToggleLink">More</a>
+        </p>
+      </div>
+
+      <!-- Stress & Anxiety Relief -->
+      <div class="card" id="stressCard">
+        <h2>Stress &amp; Anxiety Relief</h2>
+        <p>Calming auditory environments can help you recover from panic attacks...</p>
+
+        <div class="item">
+          <img src="/images/healing-water.jpg" alt="Healing Water">
+          <div class="item-content">
+            <strong>
+              <span class="sound-link" onclick="openPlayer('Healing Water')">Healing Water</span>
+            </strong>
+            <p>Escape to a forest oasis, where serenity flows like a calming stream.</p>
+          </div>
+        </div>
+        <div class="item">
+          <img src="/images/cat-purr.jpg" alt="Cat Purr">
+          <div class="item-content">
+            <strong>
+              <span class="sound-link" onclick="openPlayer('Cat Purr')">Cat Purr</span>
+            </strong>
+            <p>Cuddle up with the soothing hum of a purring kitty.</p>
+          </div>
+        </div>
+
+        <div class="hidden-items" id="stressHidden">
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Night Thunder')">Night Thunder</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Healing Water')">Healing Water</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Drifting Away')">Drifting Away</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('The Pilgrim')">The Pilgrim</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Happy Place')">Happy Place</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Twilight')">Twilight</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Senegal Town')">Senegal Town</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Subaquatic Dreams')">Subaquatic Dreams</span></span>
+        </div>
+        <p>
+          <a class="toggle-link" href="javascript:void(0)"
+             onclick="toggleItems('stressHidden','stressToggleLink')"
+             id="stressToggleLink">More</a>
+        </p>
+      </div>
+    </div>
+
+    <!-- =============== -->
+    <!-- ROW 3 -->
+    <!-- =============== -->
+    <div class="cards-container">
+      <!-- Overly Quiet Rooms -->
+      <div class="card" id="quietRoomsCard">
+        <h2>Overly Quiet Rooms</h2>
+        <p>Tiny sounds can distract. Consistent background noise can create comfort.</p>
+
+        <div class="item">
+          <img src="/images/primeval-forest.jpg" alt="Primeval Forest">
+          <div class="item-content">
+            <strong>
+              <span class="sound-link" onclick="openPlayer('Primeval Forest')">Primeval Forest</span>
+            </strong>
+            <p>One of the few remaining primeval forests in Europe, brought to your window.</p>
+          </div>
+        </div>
+        <div class="item">
+          <img src="/images/calm-office.jpg" alt="Calm Office">
+          <div class="item-content">
+            <strong>
+              <span class="sound-link" onclick="openPlayer('Calm Office')">Calm Office</span>
+            </strong>
+            <p>Miss the office chatter? Bring it home with an interactive soundscape.</p>
+          </div>
+        </div>
+
+        <div class="hidden-items" id="quietRoomsHidden">
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Fireplace')">Fireplace</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Distant Thunder')">Distant Thunder</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Rain Noise')">Rain Noise</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Healing Water')">Healing Water</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Rainy Riverbank')">Rainy Riverbank</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Levadas')">Levadas</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Cafe Restaurant')">Cafe Restaurant</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Senegal Town')">Senegal Town</span></span>
+        </div>
+        <p>
+          <a class="toggle-link" href="javascript:void(0)"
+             onclick="toggleItems('quietRoomsHidden','quietRoomsToggleLink')"
+             id="quietRoomsToggleLink">More</a>
+        </p>
+      </div>
+
+      <!-- Students with ADHD -->
+      <div class="card" id="adhdCard">
+        <h2>Students with ADHD</h2>
+        <p>Soundscapes can assist those with ADHD in enhancing concentration.</p>
+
+        <div class="item">
+          <img src="/images/stormy-weather.jpg" alt="Stormy Weather">
+          <div class="item-content">
+            <strong>
+              <span class="sound-link" onclick="openPlayer('Stormy Weather')">Stormy Weather</span>
+            </strong>
+            <p>Weather distractions away with an audio environment that sharpens focus.</p>
+          </div>
+        </div>
+        <div class="item">
+          <img src="/images/examination-time.jpg" alt="Examination Time">
+          <div class="item-content">
+            <strong>
+              <span class="sound-link" onclick="openPlayer('Examination Time')">Examination Time</span>
+            </strong>
+            <p>Exam halls can be tough when you’re used to studying in silence.</p>
+          </div>
+        </div>
+
+        <div class="hidden-items" id="adhdHidden">
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('White Noise & Co')">White Noise &amp; Co</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Rain on a Tent')">Rain on a Tent</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Cafe Restaurant')">Cafe Restaurant</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Sleeping Dragon')">Sleeping Dragon</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Japanese Garden')">Japanese Garden</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Laundromat')">Laundromat</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Take It Easy')">Take It Easy</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Binaural Beats')">Binaural Beats</span></span>
+        </div>
+        <p>
+          <a class="toggle-link" href="javascript:void(0)"
+             onclick="toggleItems('adhdHidden','adhdToggleLink')"
+             id="adhdToggleLink">More</a>
+        </p>
+      </div>
+
+      <!-- Open-Space Offices -->
+      <div class="card" id="openSpaceCard">
+        <h2>Open-Space Offices</h2>
+        <p>Ambient sounds can mask conversations in coworking spaces through headphones.</p>
+
+        <div class="item">
+          <img src="/images/speech-blocker.jpg" alt="Speech Blocker">
+          <div class="item-content">
+            <strong>
+              <span class="sound-link" onclick="openPlayer('Speech Blocker')">Speech Blocker</span>
+            </strong>
+            <p>Targets speech frequencies for optimal background chatter blocking.</p>
+          </div>
+        </div>
+        <div class="item">
+          <img src="/images/rain-noise.jpg" alt="Rain Noise">
+          <div class="item-content">
+            <strong>
+              <span class="sound-link" onclick="openPlayer('Rain Noise')">Rain Noise</span>
+            </strong>
+            <p>Use spectral shaping with natural rain sounds to block speech effectively.</p>
+          </div>
+        </div>
+
+        <div class="hidden-items" id="openSpaceHidden">
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Flying Fortress')">Flying Fortress</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Data Center')">Data Center</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Irish Coast')">Irish Coast</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('White Rain')">White Rain</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Calm Office')">Calm Office</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Waterfall Noise')">Waterfall Noise</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Cave Water')">Cave Water</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Dark Water')">Dark Water</span></span>
+        </div>
+        <p>
+          <a class="toggle-link" href="javascript:void(0)"
+             onclick="toggleItems('openSpaceHidden','openSpaceToggleLink')"
+             id="openSpaceToggleLink">More</a>
+        </p>
+      </div>
+    </div>
+
+    <!-- =============== -->
+    <!-- ROW 4 -->
+    <!-- =============== -->
+    <div class="cards-container">
+      <!-- At Home -->
+      <div class="card" id="atHomeCard">
+        <h2>At Home</h2>
+        <p>Create a peaceful atmosphere in any room for a more enjoyable living space.</p>
+
+        <div class="item">
+          <img src="/images/bamboo-garden.jpg" alt="Bamboo Garden">
+          <div class="item-content">
+            <strong>
+              <span class="sound-link" onclick="openPlayer('Bamboo Garden')">Bamboo Garden</span>
+            </strong>
+            <p>Let the whispers of wind through bamboos infuse your space with tranquility.</p>
+          </div>
+        </div>
+        <div class="item">
+          <img src="/images/morning-forest.jpg" alt="Morning Forest">
+          <div class="item-content">
+            <strong>
+              <span class="sound-link" onclick="openPlayer('Morning Forest')">Morning Forest</span>
+            </strong>
+            <p>Embrace nature's morning symphony, heralding winter's end and warmer days ahead.</p>
+          </div>
+        </div>
+
+        <div class="hidden-items" id="atHomeHidden">
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Primeval Forest')">Primeval Forest</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Whispering Trees')">Whispering Trees</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Palm Garden')">Palm Garden</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Nocturnal Garden')">Nocturnal Garden</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Bardenas Reales')">Bardenas Reales</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Jungle Life')">Jungle Life</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Pebble Beach')">Pebble Beach</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Intertidal')">Intertidal</span></span>
+        </div>
+        <p>
+          <a class="toggle-link" href="javascript:void(0)"
+             onclick="toggleItems('atHomeHidden','atHomeToggleLink')"
+             id="atHomeToggleLink">More</a>
+        </p>
+      </div>
+
+      <!-- Baby Sleep -->
+      <div class="card" id="babySleepCard">
+        <h2>Baby Sleep</h2>
+        <p>Help babies feel secure, filtering noises to maintain a restful environment.</p>
+
+        <div class="item">
+          <img src="/images/in-utero.jpg" alt="In Utero">
+          <div class="item-content">
+            <strong>
+              <span class="sound-link" onclick="openPlayer('In Utero')">In Utero</span>
+            </strong>
+            <p>Recreate the filtered sounds heard by a fetus, approximated here.</p>
+          </div>
+        </div>
+        <div class="item">
+          <img src="/images/underwater.jpg" alt="Underwater">
+          <div class="item-content">
+            <strong>
+              <span class="sound-link" onclick="openPlayer('Underwater')">Underwater</span>
+            </strong>
+            <p>Draw your little one into low–frequency aquatic sounds for instant calm.</p>
+          </div>
+        </div>
+
+        <div class="hidden-items" id="babySleepHidden">
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Unreal Ocean')">Unreal Ocean</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Japanese Garden')">Japanese Garden</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Rice Fields')">Rice Fields</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Rainy Riverbank')">Rainy Riverbank</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Cat Purr')">Cat Purr</span></span>
+        </div>
+        <p>
+          <a class="toggle-link" href="javascript:void(0)"
+             onclick="toggleItems('babySleepHidden','babySleepToggleLink')"
+             id="babySleepToggleLink">More</a>
+        </p>
+      </div>
+
+      <!-- Relaxing Music -->
+      <div class="card" id="relaxingMusicCard">
+        <h2>Relaxing Music</h2>
+        <p>Non–distracting musical backdrops, specifically engineered for focus and relaxation.</p>
+
+        <div class="item">
+          <img src="/images/88-keys.jpg" alt="88 Keys">
+          <div class="item-content">
+            <strong>
+              <span class="sound-link" onclick="openPlayer('88 Keys')">88 Keys</span>
+            </strong>
+            <p>Our custom audio engine crafts ever–changing tracks for endless immersion.</p>
+          </div>
+        </div>
+        <div class="item">
+          <img src="/images/twin-black-lodges.jpg" alt="Twin Black Lodges">
+          <div class="item-content">
+            <strong>
+              <span class="sound-link" onclick="openPlayer('Twin Black Lodges')">Twin Black Lodges</span>
+            </strong>
+            <p>With slider animation, tracks reveal themselves in fascinating ways!</p>
+          </div>
+        </div>
+
+        <div class="hidden-items" id="relaxingMusicHidden">
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Duduk Song')">Duduk Song</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Take It Easy')">Take It Easy</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Implanted Memories')">Implanted Memories</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Hands of Time')">Hands of Time</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Slow Motion')">Slow Motion</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Friends of Winter')">Friends of Winter</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Chapel Voices')">Chapel Voices</span></span>
+          <span class="extra-item"><span class="sound-link" onclick="openPlayer('Tape Memories')">Tape Memories</span></span>
+        </div>
+        <p>
+          <a class="toggle-link" href="javascript:void(0)"
+             onclick="toggleItems('relaxingMusicHidden','relaxingMusicToggleLink')"
+             id="relaxingMusicToggleLink">More</a>
+        </p>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+
+  <!-- MODAL OVERLAY FOR PLAYING MP3 -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-content">
+      <button class="close-btn" onclick="closeModal()">×</button>
+      <h2 id="modalTitle">Now Playing</h2>
+      <button class="pause-btn" id="pauseBtn">Play</button>
+      <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="100">
+    </div>
+  </div>
+
+  <script>
+    // Toggle the hamburger menu
+    function toggleMenu() {
+      const menu = document.getElementById('dropdownMenu');
+      menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+    }
+
+    // Toggle items for "More"/"Less"
+    function toggleItems(hiddenId, linkId) {
+      const hiddenDiv = document.getElementById(hiddenId);
+      const link = document.getElementById(linkId);
+      if (hiddenDiv.style.display === 'block') {
+        hiddenDiv.style.display = 'none';
+        link.textContent = 'More';
+      } else {
+        hiddenDiv.style.display = 'block';
+        link.textContent = 'Less';
+      }
+    }
+
+    // Global audio object
+    let currentAudio = null;
+
+    // openPlayer(title): Show modal, load MP3, "Play" button, volume slider
+    function openPlayer(title) {
+      // If an audio is playing, pause & reset it
+      if (currentAudio) {
+        currentAudio.pause();
+        currentAudio = null;
+      }
+
+      // Show the modal
+      const overlay = document.getElementById('modalOverlay');
+      overlay.style.display = 'flex';
+
+      // Set the modal title
+      const modalTitle = document.getElementById('modalTitle');
+      modalTitle.textContent = `Now Playing: ${title}`;
+
+      // Pause button
+      const pauseBtn = document.getElementById('pauseBtn');
+      pauseBtn.textContent = 'Play'; // reset text to "Play"
+
+      // Volume slider
+      const volumeSlider = document.getElementById('volumeSlider');
+      volumeSlider.value = 100;
+
+      // Create new audio object with the same name + .mp3
+      // e.g. "Irish Coast" => "/music/Irish%20Coast.mp3"
+      const safeTitle = encodeURIComponent(title);
+      currentAudio = new Audio(`/music/${safeTitle}.mp3`);
+      currentAudio.volume = 1.0; // set full volume initially
+
+      // Add event to toggle play/pause
+      pauseBtn.onclick = () => {
+        if (!currentAudio) return;
+        if (currentAudio.paused) {
+          currentAudio.play();
+          pauseBtn.textContent = 'Pause';
+        } else {
+          currentAudio.pause();
+          pauseBtn.textContent = 'Play';
+        }
+      };
+
+      // Adjust volume
+      volumeSlider.oninput = () => {
+        if (currentAudio) {
+          currentAudio.volume = volumeSlider.value / 100;
+        }
+      };
+    }
+
+    // closeModal(): Hide the modal, pause audio
+    function closeModal() {
+      const overlay = document.getElementById('modalOverlay');
+      overlay.style.display = 'none';
+      if (currentAudio) {
+        currentAudio.pause();
+        currentAudio = null;
+      }
+    }
+  </script>
+</body>
+</html>
